@@ -1,0 +1,137 @@
+:root {
+    --calendar-primary-color: #dd3333;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.px-4 {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.time-margin:nth-child(2) {
+    margin-top: 18px;
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+.time-margin {
+    margin-top: 38.5px;
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+.time-text {
+    margin: 0;
+    font-size: 12px;
+    top: -10px;
+    right: 5px;
+    position: absolute;
+}
+
+.cell-grid:not(:last-child) {
+    border-right-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.gutter-border {
+    border-right-width: 2px;
+    border-right-style: solid;
+}
+
+.local-border {
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+
+.select-cell {
+    width: 100%;
+    height: 15.2px;
+}
+
+.select-cell:has(input:checked) {
+    width: 100%;
+    height: 15.2px;
+    background-color: green;
+}
+
+.select-cell:has(input:not(:checked)) + select-cell:has(input:checked) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.select-cell:not(:has(input:checked)) + select-cell:has(input:checked) {
+    width: 100%;
+    height: 15.2px;
+    background-color: green;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.select-cell > input[type="checkbox"] {
+    visibility: hidden;
+}
+
+.select-cell .cell-grid:not(:last-child) {
+    border: 1px;
+    border-style: solid;
+    border-radius: 8px;
+}
+
+.select-cell:active {
+    border: 1px;
+    border-style: solid;
+    border-radius: 8px;
+}
+
+.select-cell:hover {
+    border: 1px;
+    border-style: solid;
+    border-radius: 8px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.col-header-btn {
+    background: inherit;
+    border: 0px;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--calendar-primary-color);
+    }
+}
+
+.cal-column:not(:last-child) {
+    border-right: solid 1px;
+}
+
+.location-icon {
+    width: 12px;
+    height: 12px;
+}

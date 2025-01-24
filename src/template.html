@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Widgets</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+                background: black;
+                color: white
+            }
+
+            .preview {
+                width: 100%;
+                max-width: 1100px;
+                margin: 80px auto;
+                border: 1px dashed rgba(0, 0, 0, 0.2);
+                position: relative;
+                padding: 1rem;
+            }
+
+            .preview::before {
+                content: "WIDGET PREVIEW";
+                position: absolute;
+                display: block;
+                top: -18px;
+                font-size: 11px;
+                color: rgba(0, 0, 0, 0.5);
+            }
+        </style>
+        <script defer src="/calendar.min.js"></script>
+        <link href="/calendar.min.css" rel="stylsheet"></link>
+    </head>
+    <body>
+        <div class="preview" id="calendarContainer"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const calendar = window.SiteCalendar.Calendar(
+                    "#calendarContainer",
+                    {
+                        startTime: 8,
+                        endTime: 22,
+                        weekends: false,
+                        colorScheme: "dark"
+                    },
+                );
+
+                calendar.addCategories([{
+                  id: 0,
+                  name: "Discussion",
+                  lightTheme: {
+                    "--event-background": "#ECD9C9",
+                    "--event-border-color": "#8D5C32",
+                    "--event-foreground": "rgba(29, 29, 29, 0.95)"
+                  },
+                  darkTheme: {
+                    "--event-background": "#6A4625",
+                    "--event-border-color": "#ECD9C9",
+                    "--event-foreground": "rgba(255, 255, 255, 0.95)"
+                  }
+                }]);
+
+                calendar.addEvents([
+                    {
+                        id: 0,
+                        calendarId: 0,
+                        title: "Discussion (Jonah / Tanya)",
+                        body: "I know we almost never use this feature, but this is a message body. It contains some important information. Ashley Chiu is my head TA for CS184, alongside Jennifer (idk her last name off the top of my head). Preston is there too. I'm excited to learn new things this semester, almost as excited as I am to drop 174.",
+                        location: "Dwinelle 155",
+                        start: window.DateTime.now()
+                            .startOf("day")
+                            .plus({ hours: 10 }).toJSDate(),
+                        end: window.DateTime.now()
+                            .startOf("day")
+                            .plus({ hours: 11 }).toJSDate(),
+                        links: {
+                          view: "https://place.com",
+                          clone: "https://secondlink."
+                        }
+                    },
+                    {
+                        id: 1,
+                        calendarId: 0,
+                        title: "This is a lecture with a very massive title and also it has a time but also it needs to fit within 1 hour because it's only 1 hour long",
+                        location: "Dwinelle 155",
+                        start: window.DateTime.now()
+                            .startOf("day")
+                            .plus({ hours: 10.5 }).toJSDate(),
+                        end: window.DateTime.now()
+                            .startOf("day")
+                            .plus({ hours: 12 }).toJSDate(),
+                        links: {
+                          view: "https://place.com",
+                          clone: "https://secondlink."
+                        },
+                        category: "Discussion"
+                    },
+                ]);
+
+                calendar.updateFilter((event) => {
+                  return event.title != "Discussion (Jonah / Tanya)"
+                })
+            });
+        </script>
+    </body>
+</html>
