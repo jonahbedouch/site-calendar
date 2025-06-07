@@ -10,7 +10,11 @@ const HorizontalGrid = (props: Props) => {
     cells.push(<CalendarGridLine key={`someid-${i}`} />);
   }
 
-  return <div aria-hidden="true">{cells}</div>;
+  return (
+    <div aria-hidden="true" style={{ position: "relative", zIndex: 10 }}>
+      {cells}
+    </div>
+  );
 };
 
 export default HorizontalGrid;

@@ -4,29 +4,30 @@ import { globalVars } from "./Calendar.css";
 export const calendarEventContainer = style({
   position: "absolute",
   backgroundColor: "var(--event-background)",
-  borderRadius: "4px",
+  borderRadius: "0.25em",
   border: "var(--event-border-width) solid var(--event-border-color)",
   overflowY: "hidden",
   cursor: "pointer",
   userSelect: "none",
   listStyleType: "none",
+  textWrap: "pretty",
+  zIndex: 10,
 });
 
 export const calendarEventInternal = style({
-  paddingLeft: "2px",
-  paddingTop: "1px",
-  paddingBottom: "1px",
+  paddingLeft: "4px",
+  paddingTop: "2px",
+  paddingBottom: "2px",
+  paddingRight: "4px",
   borderLeft: "3px solid",
   height: "100%",
-  fontSize: "12px",
+  fontSize: "0.75em",
   color: "var(--event-foreground)",
   borderColor: "var(--event-border-color)",
   display: "flex",
-  flexDirection: "column",
 });
 
 export const calendarEventTitle = style({
-  WebkitLineClamp: "1",
   overflow: "hidden",
   display: "-webkit-box",
   WebkitBoxOrient: "vertical",
@@ -34,7 +35,7 @@ export const calendarEventTitle = style({
 
 export const calendarDate = style({
   fontWeight: 600,
-  marginRight: "4px",
+  marginRight: "0.25em",
 });
 
 export const locationIcon = style({
@@ -44,5 +45,7 @@ export const locationIcon = style({
 
 export const locationHolder = style({
   display: "flex",
-  alignItems: "center",
+  flexGrow: 1,
+  height: "15px",
+  alignContent: "end",
 });

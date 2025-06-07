@@ -1,4 +1,4 @@
-import type { DateTime } from "luxon";
+import { DateTime } from "luxon";
 import CalendarEvent from "./CalenderEvent";
 import { State } from "../calendar.island";
 import { useContext } from "preact/hooks";
@@ -39,11 +39,18 @@ const InteractiveColumn = (props: Props) => {
     channelAllocator.allocate(event);
   }
 
+  let isToday = DateTime.now().hasSame(props.date, "day");
+
   if (events.length != 0) {
     return (
       <li
         className={`${flexCol} ${calColumn}`}
-        style={{ width: `${100 / props.numCols}%` }}
+        style={{
+          width: `${100 / props.numCols}%`,
+          backgroundColor: isToday
+            ? "var(--calendar-today-bg-color)"
+            : "inherit",
+        }}
       >
         <h2 className={srOnly}>{props.date.toFormat("DD")}</h2>
         <ul className={eventList}>

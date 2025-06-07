@@ -52,7 +52,6 @@ export const gridContainer = style({
 });
 
 export const gridListContainer = style({
-  zIndex: 10,
   position: "absolute",
   top: 0,
   left: 0,

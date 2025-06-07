@@ -13,7 +13,7 @@
         <style>
             body {
                 font-family: "Inter", sans-serif;
-                background: black;
+                background: #27262b;
                 color: white
             }
 
@@ -21,7 +21,7 @@
                 width: 100%;
                 max-width: 1100px;
                 margin: 80px auto;
-                border: 1px dashed rgba(0, 0, 0, 0.2);
+                border: 1px dashed rgba(255, 255, 255, 0.2);
                 position: relative;
                 padding: 1rem;
             }
@@ -32,7 +32,7 @@
                 display: block;
                 top: -18px;
                 font-size: 11px;
-                color: rgba(0, 0, 0, 0.5);
+                color: rgba(255, 255, 255, 0.5);
             }
         </style>
         <script defer src="/calendar.min.js"></script>
@@ -47,7 +47,7 @@
                     {
                         startTime: 8,
                         endTime: 22,
-                        weekends: false,
+                        weekends: true,
                         colorScheme: "dark"
                     },
                 );
@@ -92,10 +92,10 @@
                         location: "Dwinelle 155",
                         start: window.DateTime.now()
                             .startOf("day")
-                            .plus({ hours: 10.5 }).toJSDate(),
+                            .plus({ hours: 12 }).toJSDate(),
                         end: window.DateTime.now()
                             .startOf("day")
-                            .plus({ hours: 12 }).toJSDate(),
+                            .plus({ hours: 15 }).toJSDate(),
                         links: {
                           view: "https://place.com",
                           clone: "https://secondlink."

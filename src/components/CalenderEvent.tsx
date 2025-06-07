@@ -49,11 +49,12 @@ const CalendarEvent = (props: Props) => {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [fontSize, setFontSize] = useState(15.2);
   const button = useRef<HTMLLIElement>(null);
   const tooltip = useRef<HTMLDivElement>(null);
   const arrow = useRef<HTMLDivElement>(null);
   let popperInstance = usePopper(button.current, tooltip.current, {
-    placement: "right",
+    placement: "auto",
     modifiers: [
       {
         name: "offset",
@@ -71,7 +72,7 @@ const CalendarEvent = (props: Props) => {
       {
         name: "flip",
         options: {
-          fallbackPlacements: ["left"],
+          allowedAutoPlacements: ["left", "right"],
         },
         enabled: true,
       },
@@ -159,6 +160,12 @@ const CalendarEvent = (props: Props) => {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (button.current != null) {
+      setFontSize(parseFloat(window.getComputedStyle(button.current).fontSize));
+    }
+  }, [button]);
+
   const localStart = props.event.start.setZone("system");
   const localEnd = props.event.end.setZone("system");
 
@@ -184,25 +191,50 @@ const CalendarEvent = (props: Props) => {
         aria-focusable=""
         tabIndex={0}
       >
-        <div className={calendarEventInternal}>
+        <div
+          className={calendarEventInternal}
+          style={{
+            flexDirection: height.value > fontSize * 2 ? "column" : "row",
+          }}
+        >
           <span
             className={calendarDate}
             aria-label={`${localStart.toFormat(
               "cccc LLLL d, t",
             )} to ${localEnd.toFormat("cccc LLLL d, t")}`}
-            style={{ width: "100%" }}
+            style={{
+              minWidth: height.value > fontSize * 2 ? "unset" : "max-content",
+              marginRight: "0.25em",
+            }}
           >
             {`${localStart.toFormat(
               localStart.minute == 0 ? "ha" : "h:mma",
             )} - ${localEnd.toFormat(localEnd.minute == 0 ? "ha" : "h:mma")}`}
           </span>
-          <span className={calendarEventTitle}>{props.event.title}</span>
+          <span
+            className={calendarEventTitle}
+            style={{
+              webkitLineClamp: Math.max(
+                Math.floor((height.value - fontSize * 2 - 4) / 15),
+                1,
+              ),
+              width: height.value > fontSize * 2 ? "auto" : "100%",
+              height: height.value > fontSize * 2 ? "auto" : fontSize,
+            }}
+          >
+            {props.event.title}
+          </span>
           {props.event.location != "" ? (
-            <div className={locationHolder}>
-              <LocationIcon aria-hidden="true" />
-              <span aria-label={`Location: ${props.event.location}`}>
-                {props.event.location}
-              </span>
+            <div
+              className={locationHolder}
+              style={{ display: height.value > 50 ? "inline" : "none" }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <LocationIcon aria-hidden="true" />
+                <span aria-label={`Location: ${props.event.location}`}>
+                  {props.event.location}
+                </span>
+              </div>
             </div>
           ) : (
             <></>

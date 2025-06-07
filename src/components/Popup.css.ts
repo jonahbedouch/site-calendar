@@ -5,7 +5,7 @@ export const popupExterior = style({
   color: "var(--event-popover-color)",
   fontSize: "12px",
   position: "absolute",
-  zIndex: 10,
+  zIndex: 30,
   boxShadow: "0 2px 6px 0 rgba(0,0,0,.1)",
   borderRadius: "2px",
 });
@@ -33,8 +33,6 @@ export const popupArrow = style({
     },
     [`${popupExterior}[data-popper-placement^='left'] > &`]: {
       right: "-4px",
-      borderLeft: "1px solid var(--event-popover-border)",
-      borderBottom: "1px solid var(--event-popover-border)",
     },
     [`${popupExterior}[data-popper-placement^='right'] > &`]: {
       left: "-4px",
@@ -46,6 +44,10 @@ export const popupArrow = style({
     },
     [`${popupExterior}[data-popper-placement^='right'] > &::before`]: {
       borderLeft: "1px solid var(--event-popover-border)",
+      borderBottom: "1px solid var(--event-popover-border)",
+    },
+    [`${popupExterior}[data-popper-placement^='top'] > &::before`]: {
+      borderRight: "1px solid var(--event-popover-border)",
       borderBottom: "1px solid var(--event-popover-border)",
     },
   },

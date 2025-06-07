@@ -24,9 +24,7 @@ const ColumnHeader = (props: Props) => {
   return (
     <button
       class={colHeaderBtn}
-      data-today={props.date.equals(
-        DateTime.now().setZone(state.defaultTimezone.value).startOf("day"),
-      )}
+      data-today={DateTime.now().hasSame(props.date, "day")}
       style={{
         width: `${100 / props.numColumns}%`,
       }}

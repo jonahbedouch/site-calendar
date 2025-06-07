@@ -28,3 +28,12 @@ export const timeText = style({
   right: "5px",
   position: "absolute",
 });
+
+export const gutterBox = style({
+  height: "60px",
+  position: "relative",
+});
+
+export const today = style({
+  color: "var(--calendar-today-color)",
+});

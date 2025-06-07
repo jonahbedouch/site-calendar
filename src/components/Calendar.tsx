@@ -25,6 +25,7 @@ import ViewButtons from "./ViewButtons";
 import DateButtons from "./DateButtons";
 import MonthView from "./MonthView";
 import { bigSeparator, smallSpearator } from "./Buttons.css";
+import TimeIndicator from "./TimeIndicator";
 
 const Calendar = () => {
   let state = useContext(State);
@@ -37,13 +38,13 @@ const Calendar = () => {
 
   let lowerBound = computed(() => {
     return state.currentDate.value
-      .startOf("day")
+      .startOf(state.currentMode.value == CalendarMode.Day ? "day" : "week")
       .setZone(timezone)
       .set({ hour: state.startTime.value + 1 });
   });
   let upperBound = computed(() => {
     return state.currentDate.value
-      .startOf("day")
+      .startOf(state.currentMode.value == CalendarMode.Day ? "day" : "week")
       .setZone(timezone)
       .set({ hour: state.endTime.value });
   });
@@ -107,6 +108,7 @@ const Calendar = () => {
         <div className={flexRow}>
           <CalendarGutter lowerBound={lowerBound} upperBound={upperBound} />
           <div className={gridContainer}>
+            <TimeIndicator lowerBound={lowerBound} upperBound={upperBound} />
             <HorizontalGrid
               cellCnt={state.endTime.value - state.startTime.value}
             />

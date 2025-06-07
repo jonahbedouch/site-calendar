@@ -24,6 +24,7 @@ const DEFAULT_LIGHT_THEME: GlobalTheme = {
   "--event-popover-color": "#000",
   "--event-popover-link-color": "#3B18D8",
   "--calendar-today-color": "#DD3333",
+  "--calendar-today-bg-color": "rgba(81, 92, 230, 0.05)",
   "--calendar-day-color": "inherit",
   "--calendar-day-hover-color": "#DD3333",
   "--calendar-day-hover-bg-color": "inherit",
@@ -46,6 +47,7 @@ const DEFAULT_DARK_THEME: GlobalTheme = {
   "--event-popover-color": "#fff",
   "--event-popover-link-color": "#A0CFEE",
   "--calendar-today-color": "#FFAAAA",
+  "--calendar-today-bg-color": "rgba(81, 92, 230, 0.05)",
   "--calendar-day-color": "inherit",
   "--calendar-day-hover-color": "#FFAAAA",
   "--calendar-day-hover-bg-color": "inherit",
@@ -286,6 +288,11 @@ function StateProvider(props: { state: AppStateS }) {
       StateManager.setMode(props.state.currentMode, CalendarMode.Week);
     } else if (event.key.toLowerCase() == "d") {
       StateManager.setMode(props.state.currentMode, CalendarMode.Day);
+    } else if (event.key.toLowerCase() == "t") {
+      StateManager.setDate(
+        props.state.currentDate,
+        DateTime.now().setZone(state.defaultTimezone.value).startOf("day"),
+      );
     }
   });
 

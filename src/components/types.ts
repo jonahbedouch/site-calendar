@@ -15,6 +15,7 @@ export type CalendarModeT = (typeof CalendarMode)[keyof typeof CalendarMode];
 
 export type GlobalTheme = {
   "--calendar-today-color": string;
+  "--calendar-today-bg-color": string;
   "--calendar-day-color": string;
   "--calendar-day-hover-color": string;
   "--calendar-day-hover-bg-color": string;
