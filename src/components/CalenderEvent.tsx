@@ -139,11 +139,10 @@ const CalendarEvent = (props: Props) => {
     }
   };
 
-  const handleBlur = (_: FocusEvent) => {
+  const handleBlur = (event: FocusEvent) => {
     if (
-      props.event.links == undefined ||
-      ("clone" in props.event.links == false &&
-        "view" in props.event.links == false)
+      event.relatedTarget != null &&
+      tooltip.current?.contains(event.relatedTarget as Element) == false
     ) {
       setIsOpen(false);
     }
