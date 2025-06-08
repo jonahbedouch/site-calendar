@@ -37,32 +37,33 @@ const CalendarGutter = (props: Props) => {
   let zoneTimes: string[] = [];
   let localTimes: string[] = [];
 
-  let now = DateTime.now()
-    .setZone(timezone)
-    .set({ weekday: mode == CalendarMode.Week ? 1 : undefined });
-  let nowLocal = now.setZone("system");
+  let now = DateTime.now().setZone(timezone);
+  let weekStart = now.set({
+    weekday: mode == CalendarMode.Week ? 1 : undefined,
+  });
+  let nowLocal = weekStart.setZone("system");
 
   let maxIndexDur = stopZone.diff(startZone, "hours").plus({ hours: 1 });
-  let timeIndexDur = now.diff(startZone, "hours");
+  let timeIndexDur = weekStart.diff(startZone, "hours");
 
   let displayTime =
-    (mode == CalendarMode.Day &&
-      currentDate.startOf("day").equals(now.startOf("day"))) ||
+    (mode == CalendarMode.Day && weekStart.hasSame(currentDate, "day")) ||
     (mode == CalendarMode.Week &&
-      currentDate.startOf("week").equals(now.startOf("week")) &&
+      currentDate.startOf("week").equals(weekStart.startOf("week")) &&
       (weekendVisible || now.weekday < 6));
   let timeIndex = Math.max(
     Math.min(Math.floor(timeIndexDur.hours), maxIndexDur.hours - 2),
     -1,
   );
   let position =
-    now >= stopZone
+    weekStart >= stopZone
       ? 60 + TIME_OFFSET
-      : now <= startZone.minus({ minutes: 60 - TIME_OFFSET })
+      : weekStart <= startZone.minus({ minutes: 60 - TIME_OFFSET })
         ? 0
-        : now.minute + TIME_OFFSET;
+        : weekStart.minute + TIME_OFFSET;
   let isSaturated =
-    now >= stopZone || now <= startZone.minus({ minutes: 60 - TIME_OFFSET });
+    weekStart >= stopZone ||
+    weekStart <= startZone.minus({ minutes: 60 - TIME_OFFSET });
 
   while (startZone < stopZone) {
     zoneTimes.push(startZone.toFormat("t"));
@@ -80,8 +81,8 @@ const CalendarGutter = (props: Props) => {
       !displayTime ||
       isSaturated ||
       (i != timeIndex && i != timeIndex + 1) ||
-      (i == timeIndex && now.minute >= TIME_LBOUND) ||
-      (i == timeIndex + 1 && now.minute <= TIME_UBOUND)
+      (i == timeIndex && weekStart.minute >= TIME_LBOUND) ||
+      (i == timeIndex + 1 && weekStart.minute <= TIME_UBOUND)
     );
   };
 
@@ -97,7 +98,7 @@ const CalendarGutter = (props: Props) => {
 
           {displayTime &&
             timeIndex == -1 &&
-            (showLocal == false || now.minute >= 40) && (
+            (showLocal == false || weekStart.minute >= 40) && (
               <p
                 className={`${margin0} ${timeText}`}
                 style={{
@@ -105,7 +106,7 @@ const CalendarGutter = (props: Props) => {
                   color: "var(--calendar-today-color)",
                 }}
               >
-                {now.toFormat("t")}
+                {weekStart.toFormat("t")}
               </p>
             )}
         </div>
@@ -122,7 +123,7 @@ const CalendarGutter = (props: Props) => {
                   top: position,
                 }}
               >
-                {now.toFormat("t")}
+                {weekStart.toFormat("t")}
               </p>
             )}
           </div>
@@ -132,7 +133,7 @@ const CalendarGutter = (props: Props) => {
         <div className={localBorder} style={{ width: "75px" }}>
           <div className={gutterBox}>
             <h2 className={`${timeHeader} ${margin0}`}>Your Time</h2>
-            {timeIndex == -1 && now.minute >= 40 && (
+            {timeIndex == -1 && weekStart.minute >= 40 && (
               <p
                 className={`${margin0} ${timeText} ${today}`}
                 style={{
