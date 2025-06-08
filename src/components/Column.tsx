@@ -39,18 +39,12 @@ const InteractiveColumn = (props: Props) => {
     channelAllocator.allocate(event);
   }
 
-  let isToday = DateTime.now().hasSame(props.date, "day");
-
   if (events.length != 0) {
     return (
       <li
         className={`${flexCol} ${calColumn}`}
-        style={{
-          width: `${100 / props.numCols}%`,
-          backgroundColor: isToday
-            ? "var(--calendar-today-bg-color)"
-            : "inherit",
-        }}
+        data-today={DateTime.now().hasSame(props.date, "day") || undefined}
+        style={{ width: `${100 / props.numCols}%` }}
       >
         <h2 className={srOnly}>{props.date.toFormat("DD")}</h2>
         <ul className={eventList}>
@@ -68,6 +62,7 @@ const InteractiveColumn = (props: Props) => {
   return (
     <li
       className={`${flexCol} ${calColumn}`}
+      data-today={DateTime.now().hasSame(props.date, "day") || undefined}
       style={{ width: `${100 / props.numCols}%` }}
     >
       <h2 className={srOnly}>{`No events on ${props.date.toFormat("DD")}`}</h2>

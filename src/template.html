@@ -14,7 +14,7 @@
             body {
                 font-family: "Inter", sans-serif;
                 background: #27262b;
-                color: white
+                color: white;
             }
 
             .preview {
@@ -36,7 +36,7 @@
             }
         </style>
         <script defer src="/calendar.min.js"></script>
-        <link href="/calendar.min.css" rel="stylsheet"></link>
+        <link href="/calendar.min.css" rel="stylsheet" />
     </head>
     <body>
         <div class="preview" id="calendarContainer"></div>
@@ -48,65 +48,84 @@
                         startTime: 8,
                         endTime: 22,
                         weekends: true,
-                        colorScheme: "dark"
+                        colorScheme: "dark",
                     },
                 );
 
-                calendar.addCategories([{
-                  id: 0,
-                  name: "Discussion",
-                  lightTheme: {
-                    "--event-background": "#ECD9C9",
-                    "--event-border-color": "#8D5C32",
-                    "--event-foreground": "rgba(29, 29, 29, 0.95)"
-                  },
-                  darkTheme: {
-                    "--event-background": "#6A4625",
-                    "--event-border-color": "#ECD9C9",
-                    "--event-foreground": "rgba(255, 255, 255, 0.95)"
-                  }
-                }]);
+                calendar.addCategories([
+                    {
+                        id: 0,
+                        name: "Discussion",
+                        lightTheme: {
+                            "--event-background": "#ECD9C9",
+                            "--event-border-color": "#8D5C32",
+                            "--event-foreground": "rgba(29, 29, 29, 0.95)",
+                        },
+                        darkTheme: {
+                            "--event-background": "#6A4625",
+                            "--event-border-color": "#ECD9C9",
+                            "--event-foreground": "rgba(255, 255, 255, 0.95)",
+                        },
+                    },
+                ]);
 
                 calendar.addEvents([
                     {
                         id: 0,
                         calendarId: 0,
                         title: "Discussion (Jonah / Tanya)",
-                        body: "I know we almost never use this feature, but this is a message body. It contains some important information. Ashley Chiu is my head TA for CS184, alongside Jennifer (idk her last name off the top of my head). Preston is there too. I'm excited to learn new things this semester, almost as excited as I am to drop 174.",
+                        // body: "I know we almost never use this feature, but this is a message body. It contains some important information. Ashley Chiu is my head TA for CS184, alongside Jennifer (idk her last name off the top of my head). Preston is there too. I'm excited to learn new things this semester, almost as excited as I am to drop 174.",
                         location: "Dwinelle 155",
                         start: window.DateTime.now()
                             .startOf("day")
-                            .plus({ hours: 10 }).toJSDate(),
+                            .plus({ hours: 10 })
+                            .toJSDate(),
                         end: window.DateTime.now()
                             .startOf("day")
-                            .plus({ hours: 11 }).toJSDate(),
+                            .plus({ hours: 11 })
+                            .toJSDate(),
                         links: {
-                          view: "https://place.com",
-                          clone: "https://secondlink."
-                        }
-                    },
-                    {
-                        id: 1,
-                        calendarId: 0,
-                        title: "This is a lecture with a very massive title and also it has a time but also it needs to fit within 1 hour because it's only 1 hour long",
-                        location: "Dwinelle 155",
-                        start: window.DateTime.now()
-                            .startOf("day")
-                            .plus({ hours: 12 }).toJSDate(),
-                        end: window.DateTime.now()
-                            .startOf("day")
-                            .plus({ hours: 15 }).toJSDate(),
-                        links: {
-                          view: "https://place.com",
-                          clone: "https://secondlink."
+                            left: {
+                                text: "Open in Google Calendar",
+                                url: "https://place.com",
+                            },
+                            right: {
+                                text: "Copy to your calendar",
+                                url: "https://secondlink.",
+                            },
                         },
-                        category: "Discussion"
+                        category: "Discussion",
                     },
+                    // {
+                    //     id: 1,
+                    //     calendarId: 1,
+                    //     title: "This is a lecture with a very massive title and also it has a time but also it needs to fit within 1 hour because it's only 1 hour long",
+                    //     location: "Dwinelle 155",
+                    //     start: window.DateTime.now()
+                    //         .startOf("day")
+                    //         .plus({ hours: 12 })
+                    //         .toJSDate(),
+                    //     end: window.DateTime.now()
+                    //         .startOf("day")
+                    //         .plus({ hours: 15 })
+                    //         .toJSDate(),
+                    //     links: {
+                    //         left: {
+                    //             text: "Open in Google Calendar",
+                    //             url: "https://place.com",
+                    //         },
+                    //         right: {
+                    //             text: "Copy to your calendar",
+                    //             url: "https://secondlink.",
+                    //         },
+                    //     },
+                    //     category: "Discussion",
+                    // },
                 ]);
 
-                calendar.updateFilter((event) => {
-                  return event.title != "Discussion (Jonah / Tanya)"
-                })
+                // calendar.updateFilter((event) => {
+                //     return event.title != "Discussion (Jonah / Tanya)";
+                // });
             });
         </script>
     </body>

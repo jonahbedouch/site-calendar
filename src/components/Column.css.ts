@@ -9,6 +9,9 @@ export const eventList = style({
 
 export const calColumn = style({
   selectors: {
+    "&[data-today='true']": {
+      backgroundColor: "var(--calendar-today-bg-color)",
+    },
     "&:not(:last-child)": {
       borderRight: "solid 1px",
     },

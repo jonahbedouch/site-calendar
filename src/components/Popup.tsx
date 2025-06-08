@@ -3,6 +3,7 @@ import { Event } from "./types";
 import {
   popupArrow,
   popupColorBar,
+  popupFooter,
   popupInterior,
   popupLink,
 } from "./Popup.css";
@@ -17,6 +18,20 @@ const EventPopup = (props: Props) => {
   const sameDay = props.event.start
     .startOf("day")
     .equals(props.event.end.startOf("day"));
+
+  const hasLeftLink =
+    "links" in props.event &&
+    "left" in props.event.links &&
+    props.event.links.left != undefined &&
+    "text" in props.event.links.left &&
+    "url" in props.event.links.left;
+
+  const hasRightLink =
+    "links" in props.event &&
+    "right" in props.event.links &&
+    props.event.links.right != undefined &&
+    "text" in props.event.links.right &&
+    "url" in props.event.links.right;
 
   return (
     <>
@@ -62,27 +77,28 @@ const EventPopup = (props: Props) => {
           </span>
         )}
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          borderLeft: "1px solid var(--event-popover-border)",
-          borderBottom: "1px solid var(--event-popover-border)",
-          borderRight: "1px solid var(--event-popover-border)",
-          borderRadius: "0 0 2px 2px",
-        }}
-      >
-        {(props.event.links?.view ?? "") != "" && (
-          <a tabIndex={0} href={props.event.links?.view} className={popupLink}>
-            Open in Google Calendar
-          </a>
-        )}
-        {(props.event.links?.clone ?? "") != "" && (
-          <a tabIndex={0} href={props.event.links?.clone} className={popupLink}>
-            Copy to your calendar
-          </a>
-        )}
-      </div>
+      {(hasLeftLink || hasRightLink) && (
+        <div className={popupFooter}>
+          {hasLeftLink && (
+            <a
+              tabIndex={0}
+              href={props.event.links.left!.url ?? "#"}
+              className={popupLink}
+            >
+              {props.event.links.left!.text ?? ""}
+            </a>
+          )}
+          {hasRightLink && (
+            <a
+              tabIndex={0}
+              href={props.event.links.right!.url ?? "#"}
+              className={popupLink}
+            >
+              {props.event.links.right!.text ?? ""}
+            </a>
+          )}
+        </div>
+      )}
 
       <div className={popupColorBar}></div>
     </>

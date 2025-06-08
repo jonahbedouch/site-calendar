@@ -86,7 +86,7 @@ export type Event = {
   location: string;
   start: DateTime;
   end: DateTime;
-  links: { view: string; clone: string };
+  links: Partial<{ left: Link; right: Link }>;
   category: EventCategory | undefined;
 };
 
@@ -98,6 +98,11 @@ export type ProvidedUserEvent = {
   location: string;
   start: Date | DateTime | string;
   end: Date | DateTime | string;
-  links: { view: string; clone: string };
+  links: Partial<{ left: Link; right: Link }>;
   category: string;
+};
+
+export type Link = {
+  text: string;
+  url: string;
 };

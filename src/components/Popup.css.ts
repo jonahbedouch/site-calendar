@@ -71,6 +71,15 @@ export const popupColorBar = style({
   backgroundColor: "var(--event-background)",
 });
 
+export const popupFooter = style({
+  display: "flex",
+  flexDirection: "row",
+  borderLeft: "1px solid var(--event-popover-border)",
+  borderBottom: "1px solid var(--event-popover-border)",
+  borderRight: "1px solid var(--event-popover-border)",
+  borderRadius: "0 0 2px 2px",
+});
+
 export const popupLink = style({
   color: "var(--event-popover-link-color)",
   textDecoration: "underline",

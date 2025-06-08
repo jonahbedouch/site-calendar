@@ -89,38 +89,33 @@ const CalendarGutter = (props: Props) => {
     <div className={`${flexRow} ${gutterBorder}`} aria-hidden="true">
       <div style={{ width: "75px" }}>
         <div className={gutterBox}>
-          {showLocal ? (
+          {showLocal && (
             <h2 className={`${timeHeader} ${margin0}`}>
               {state.defaultTimezoneName}
             </h2>
-          ) : (
-            <></>
           )}
 
           {displayTime &&
-          timeIndex == -1 &&
-          (showLocal == false || now.minute >= 40) ? (
-            <p
-              className={`${margin0} ${timeText}`}
-              style={{
-                top: position,
-                color: "var(--calendar-today-color)",
-              }}
-            >
-              {now.toFormat("t")}
-            </p>
-          ) : (
-            <></>
-          )}
+            timeIndex == -1 &&
+            (showLocal == false || now.minute >= 40) && (
+              <p
+                className={`${margin0} ${timeText}`}
+                style={{
+                  top: position,
+                  color: "var(--calendar-today-color)",
+                }}
+              >
+                {now.toFormat("t")}
+              </p>
+            )}
         </div>
         {zoneTimes.map((time, i) => (
           <div className={gutterBox} key={`ztgb-${time}`}>
-            {isIndicatorVisible(i) ? (
+            {isIndicatorVisible(i) && (
               <p className={`${margin0} ${timeText}`}>{time}</p>
-            ) : (
-              <></>
             )}
-            {displayTime && i == timeIndex ? (
+
+            {displayTime && i == timeIndex && (
               <p
                 className={`${margin0} ${timeText} ${today}`}
                 style={{
@@ -129,8 +124,6 @@ const CalendarGutter = (props: Props) => {
               >
                 {now.toFormat("t")}
               </p>
-            ) : (
-              <></>
             )}
           </div>
         ))}
@@ -139,7 +132,7 @@ const CalendarGutter = (props: Props) => {
         <div className={localBorder} style={{ width: "75px" }}>
           <div className={gutterBox}>
             <h2 className={`${timeHeader} ${margin0}`}>Your Time</h2>
-            {timeIndex == -1 && now.minute >= 40 ? (
+            {timeIndex == -1 && now.minute >= 40 && (
               <p
                 className={`${margin0} ${timeText} ${today}`}
                 style={{
@@ -148,18 +141,14 @@ const CalendarGutter = (props: Props) => {
               >
                 {nowLocal.toFormat("t")}
               </p>
-            ) : (
-              <></>
             )}
           </div>
           {localTimes.map((time, i) => (
             <div className={gutterBox} key={`ltgb-${time}`}>
-              {isIndicatorVisible(i) ? (
+              {isIndicatorVisible(i) && (
                 <p className={`${margin0} ${timeText}`}>{time}</p>
-              ) : (
-                <></>
               )}
-              {displayTime && i == timeIndex ? (
+              {displayTime && i == timeIndex && (
                 <p
                   className={`${margin0} ${timeText} ${today}`}
                   style={{
@@ -168,8 +157,6 @@ const CalendarGutter = (props: Props) => {
                 >
                   {nowLocal.toFormat("t")}
                 </p>
-              ) : (
-                <></>
               )}
             </div>
           ))}
