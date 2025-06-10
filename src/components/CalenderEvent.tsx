@@ -10,14 +10,20 @@ import {
   calendarEventTitle,
   locationHolder,
 } from "./CalendarEvent.css";
-import {
-  createPopper,
-  Instance,
-  State as PState,
-} from "@popperjs/core/lib/popper-lite";
 import EventPopup from "./Popup";
-import { popupArrow, popupExterior } from "./Popup.css";
-import { usePopper } from "react-popper";
+import { popupExterior } from "./Popup.css";
+import {
+  arrow,
+  autoUpdate,
+  flip,
+  FloatingArrow,
+  offset,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from "@floating-ui/react";
 
 const MINUTE_PX = 1;
 
@@ -50,120 +56,75 @@ const CalendarEvent = (props: Props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [fontSize, setFontSize] = useState(15.2);
-  const button = useRef<HTMLLIElement>(null);
-  const tooltip = useRef<HTMLDivElement>(null);
-  const arrow = useRef<HTMLDivElement>(null);
-  let popperInstance = usePopper(button.current, tooltip.current, {
-    placement: "auto",
-    modifiers: [
-      {
-        name: "offset",
-        options: {
-          offset: [0, 8],
-        },
-      },
-      {
-        name: "arrow",
-        options: {
-          element: arrow.current,
-        },
-        enabled: true,
-      },
-      {
-        name: "flip",
-        options: {
-          allowedAutoPlacements: ["left", "right"],
-        },
-        enabled: true,
-      },
+
+  const arrowRef = useRef<HTMLDivElement>(null);
+  const { refs, floatingStyles, context } = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    whileElementsMounted: autoUpdate,
+    placement: "right",
+    middleware: [
+      offset(8),
+      shift(),
+      flip({ fallbackPlacements: ["left", "top"] }),
+      arrow({
+        element: arrowRef,
+        padding: { top: 10, bottom: 2, left: 2, right: 2 },
+      }),
     ],
   });
 
-  const handleButtonClick = () => {
-    setIsOpen(true);
-
-    if (popperInstance && popperInstance.update != null) {
-      popperInstance.update();
-    }
-  };
-
-  const handleButtonKeyPress = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
-      setIsOpen(true);
-
-      if (popperInstance && popperInstance.update != null) {
-        popperInstance.update();
-      }
-    }
-  };
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    click,
+    dismiss,
+  ]);
 
   // Handle the focusout event to close the tooltip if focus moves out of the tooltip
   const handleFocusOut = (e: FocusEvent) => {
     // Check if the focus has moved out of the tooltip
-    if (tooltip.current && !tooltip.current.contains(e.relatedTarget as Node)) {
-      setIsOpen(false);
-    }
-  };
-
-  const handleEscape = (event: KeyboardEvent) => {
-    if (event.key == "Escape") {
+    if (
+      refs.floating.current &&
+      !refs.floating.current.contains(e.relatedTarget as Node)
+    ) {
       setIsOpen(false);
     }
   };
 
   // Attach the focusout event listener to the tooltip
   useEffect(() => {
-    if (tooltip.current) {
-      tooltip.current.addEventListener("focusout", handleFocusOut, true);
-      document.addEventListener("keydown", handleEscape, true);
+    if (refs.floating.current) {
+      refs.floating.current.addEventListener("focusout", handleFocusOut, true);
     }
 
     return () => {
-      if (tooltip.current) {
-        tooltip.current.removeEventListener("focusout", handleFocusOut, true);
-        document.removeEventListener("keydown", handleEscape, true);
+      if (refs.floating.current) {
+        refs.floating.current.removeEventListener(
+          "focusout",
+          handleFocusOut,
+          true,
+        );
       }
     };
   }, [isOpen]);
 
-  // Close tooltip if user clicks outside of the button or tooltip
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      button.current &&
-      event.target &&
-      !button.current.contains(event.target as Node) &&
-      tooltip.current &&
-      !tooltip.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
   const handleBlur = (event: FocusEvent) => {
     if (
       event.relatedTarget != null &&
-      tooltip.current?.contains(event.relatedTarget as Element) == false
+      refs.floating.current?.contains(event.relatedTarget as Element) == false
     ) {
       setIsOpen(false);
     }
   };
 
-  // Attach click event listener to the document to detect clicks outside
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("click", handleClickOutside);
+    if (refs.reference.current != null) {
+      setFontSize(
+        parseFloat(window.getComputedStyle(refs.reference.current).fontSize),
+      );
     }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (button.current != null) {
-      setFontSize(parseFloat(window.getComputedStyle(button.current).fontSize));
-    }
-  }, [button]);
+  }, [refs.reference.current]);
 
   const localStart = props.event.start.setZone("system");
   const localEnd = props.event.end.setZone("system");
@@ -181,14 +142,13 @@ const CalendarEvent = (props: Props) => {
             ? (props.event.category?.lightTheme ?? "")
             : (props.event.category?.darkTheme ?? "")),
         }}
-        ref={button}
-        onClick={handleButtonClick}
+        ref={refs.setReference}
         onBlur={handleBlur}
-        onKeyDown={handleButtonKeyPress}
         aria-describedby={`${props.event.id}-dialog`}
         role="button"
         aria-focusable=""
         tabIndex={0}
+        {...getReferenceProps()}
       >
         <div
           className={calendarEventInternal}
@@ -240,38 +200,37 @@ const CalendarEvent = (props: Props) => {
           )}
         </div>
       </li>
-
-      <div
-        className={popupExterior}
-        ref={tooltip}
-        style={{
-          visibility: isOpen ? "visible" : "hidden", // Make it visible when opened
-          position: "relative",
-          ...(state.colorScheme.value == "light"
-            ? (props.event.category?.lightTheme ?? "")
-            : (props.event.category?.darkTheme ?? "")),
-          ...(popperInstance?.styles.popper ?? ""),
-        }}
-        role="dialog"
-        id={`${props.event.id}-dialog`}
-        aria-labelledby={`${props.event.id}-dialog-title`}
-        aria-describedby={
-          props.event.body != "" ? `${props.event.id}-dialog-body` : undefined
-        }
-        {...popperInstance?.attributes.popper}
-      >
+      {isOpen && (
         <div
-          ref={arrow}
-          className={popupArrow}
+          className={popupExterior}
+          ref={refs.setFloating}
           style={{
-            ...(popperInstance?.styles.arrow ?? ""),
-            display: isOpen ? "block" : "none",
+            position: "relative",
+            ...(state.colorScheme.value == "light"
+              ? (props.event.category?.lightTheme ?? "")
+              : (props.event.category?.darkTheme ?? "")),
+            ...(floatingStyles ?? ""),
           }}
-          {...popperInstance?.attributes.arrow}
-          aria-hidden="true"
-        ></div>
-        <EventPopup event={props.event} />
-      </div>
+          role="dialog"
+          id={`${props.event.id}-dialog`}
+          aria-labelledby={`${props.event.id}-dialog-title`}
+          aria-describedby={
+            props.event.body != "" ? `${props.event.id}-dialog-body` : undefined
+          }
+          {...getFloatingProps()}
+        >
+          <FloatingArrow
+            ref={arrowRef}
+            context={context}
+            fill={"var(--event-popover-bg)"}
+            stroke={"var(--event-popover-border)"}
+            strokeWidth={1}
+            tipRadius={0.5}
+            style={{ transform: "translateY(-1px)" }}
+          />
+          <EventPopup event={props.event} />
+        </div>
+      )}
     </>
   );
 };

@@ -1,7 +1,6 @@
 import { Ref } from "preact";
 import { Event } from "./types";
 import {
-  popupArrow,
   popupColorBar,
   popupFooter,
   popupInterior,
